@@ -6,6 +6,7 @@ const { Usermodel } = require("./db");
 const jwt = require("jsonwebtoken");
 app.json(express.json());
 import { secret } from "./config.js";
+import authMiddleware from "./auth.js";
 mongoose.connect("");
 
 app.post("/signup",async (req,res) =>{
@@ -24,7 +25,7 @@ app.post("/signup",async (req,res) =>{
  })
 }
 )
-app.post("/signin", async (req,res)=>{
+app.post("/signin", authMiddleware, async (req,res)=>{
     const username = req.body.username;
     const password = req.body.password;
   const user = await Usermodel.findOne({
@@ -42,6 +43,13 @@ app.post("/signin", async (req,res)=>{
     res.json({
         message:"signin successgull",
         token:token
+    })
+})
+
+app.get("/protected", authMiddleware , async (req,res) =>{
+    res.json({
+        message:"this is the protected route",
+        userid: req.userid
     })
 })
 
