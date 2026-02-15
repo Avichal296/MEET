@@ -4,9 +4,8 @@ const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
 const { Usermodel } = require("./db");
 const jwt = require("jsonwebtoken");
-const secret = "mysecretkey";
 app.json(express.json());
-
+import { secret } from "./config.js";
 mongoose.connect("");
 
 app.post("/signup",async (req,res) =>{
@@ -38,11 +37,6 @@ app.post("/signin", async (req,res)=>{
     res.send("Invalid username");
   }
   const token = jwt.sign({id: user._id},secret);
-  const verifytoken = jwt.verify(token,secret);
-  if(!verifytoken){
-    res.send("Invalid token");
-
-  }
 
 
     res.json({
